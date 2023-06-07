@@ -1,12 +1,11 @@
-import 'package:actividad1/features/games/domain/entities/game.dart';
-import 'package:actividad1/features/games/domain/repositories/games_repositories.dart';
+import 'package:messageapp/features/message/users/domain/repositories/users_repositories.dart';
 
-class CreateGameUsecase {
-  final GamesRepository gamesRepository;
+class CreateUserUsecase {
+  final UsersRepository usersRepository;
 
-  CreateGameUsecase(this.gamesRepository);
+  CreateUserUsecase(this.usersRepository);
 
-  Future<String> execute(nombre, descrip, img) async {
-    return await gamesRepository.createGames(nombre, descrip, img);
+  Future<String> execute(username, correo, passw) async {
+    return await usersRepository.createUser(username, correo, passw);
   }
 }
