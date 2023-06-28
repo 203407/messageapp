@@ -4,9 +4,9 @@ import 'dart:convert' as convert;
 import 'package:messageapp/features/message/users/data/models/users_models.dart';
 
 abstract class UsersRemoteDataSource {
-  Future<List<UsersModel>> getUsers();
+  Future<List<UsersModel>> getUsers(username);
   Future<String> createUser(username, correo, passw);
-  Future<String> validateUser(username, passw);
+  Future<Map<String, dynamic>> validateUser(username, passw);
   // Future<String> updateGames(id, stars, descri, titulo, img);
   // Future<String> deleteGames(id);
 }
@@ -15,23 +15,32 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
-  Future<List<UsersModel>> getUsers() async {
+  Future<List<UsersModel>> getUsers(username) async {
     List users = [];
     CollectionReference collectionReferenceGames = db.collection('users');
 
-    QuerySnapshot queryGames = await collectionReferenceGames.get();
+    // Realiza la consulta utilizando la cláusula "where"
 
-    for (var doc in queryGames.docs) {
-      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    await collectionReferenceGames
+        .where('username', isNotEqualTo: username)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        // Accede a los datos de cada documento
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      final user = {
-        'username': data['username'],
-        'correo': data['correo'],
-        'id': doc.id,
-        'passw': data['passw']
-      };
-      users.add(user);
-    }
+        final user = {
+          'username': data['username'],
+          'correo': data['correo'],
+          'id': doc.id,
+          'passw': data['passw']
+        };
+
+        users.add(user);
+      });
+    }).catchError((error) {
+      return ("Error getting documents: $error");
+    });
 
     return users.map<UsersModel>((data) => UsersModel.fromJson(data)).toList();
   }
@@ -50,54 +59,29 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
   }
 
   @override
-  Future<String> validateUser(username, passw) async {
-    String status = "desconocido";
+  Future<Map<String, dynamic>> validateUser(username, passw) async {
     CollectionReference collectionReferenceGames = db.collection('users');
 
     QuerySnapshot queryGames = await collectionReferenceGames.get();
+    Map<String, dynamic> estatus = {
+      'estado': 'incorrecto',
+    };
 
     for (var doc in queryGames.docs) {
       final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
       if (data['username'] == username) {
         if (data['passw'] == passw) {
-          status = "correcto";
-        } else {
-          status = "incorrecto";
+          Map<String, dynamic> resultado = {
+            'username': data['username'],
+            'correo': data['correo'],
+            'estado': 'correcto',
+          };
+          return resultado;
         }
-      } else {
-        status = "incorrecto";
       }
-
-      // final user = {
-      //   'username': data['username'],
-      //   'correo': data['correo'],
-      //   'id': doc.id,
-      //   'passw': data['passw']
-      // };
-      // users.add(user);
     }
 
-    return status;
+    return estatus;
   }
-
-  // @override
-  // Future<String> updateGames(id, stars, descri, titulo, img) async {
-  //   final data = {
-  //     "Titulo": titulo.toString(),
-  //     "Imagen": img.toString(),
-  //     "Descripcion": descri.toString(),
-  //     "Estrellas": stars
-  //   };
-
-  //   await db.collection("games").doc(id).set(data);
-
-  //   return "si2";
-  // }
-
-  // @override
-  // Future<String> deleteGames(id) async {
-  //   await db.collection("games").doc(id).delete();
-  //   return "si3";
-  // }
 }

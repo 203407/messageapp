@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messageapp/features/message/chat/presentation/blocs/chats_bloc.dart';
+import 'package:messageapp/features/message/chat/presentation/blocs/message/message_bloc.dart';
 import 'package:messageapp/features/message/users/presentation/blocs/users_bloc.dart';
-import 'package:messageapp/features/message/users/presentation/pages/login.dart';
-import 'package:messageapp/features/message/users/presentation/pages/register.dart';
-import 'package:messageapp/testfirebase.dart';
-import 'package:messageapp/usecase_config.dart';
+import 'package:messageapp/features/message/users/presentation/pages/loginJesus.dart';
+import 'package:messageapp/features/message/users/presentation/pages/registerJesus.dart';
 
-import 'features/message/users/presentation/pages/signF.dart';
+import 'package:messageapp/features/message/users/presentation/pages/menu.dart';
+
+import 'package:messageapp/usecase_config.dart';
+import 'package:messageapp/usecase_configchat.dart';
+
 import 'firebase_options.dart';
 
 UsecaseConfig usecaseConfig = UsecaseConfig();
+UsecaseConfigchat usecaseConfigchat = UsecaseConfigchat();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +37,20 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<UsersBloc>(
           create: (BuildContext context) => UsersBloc(
-              getUsersUsecase: usecaseConfig.getUsersUsecase!,
-              createUserUsecase: usecaseConfig.createUserUsecase!,
-              validateUsersUsecase: usecaseConfig.validateUsersUsecase!),
+            getUsersUsecase: usecaseConfig.getUsersUsecase!,
+            createUserUsecase: usecaseConfig.createUserUsecase!,
+            validateUsersUsecase: usecaseConfig.validateUsersUsecase!,
+          ),
         ),
+        BlocProvider(
+          create: (BuildContext context) =>
+              ChatBloc(getDocIdUsecase: usecaseConfigchat.getDocIdUsecase!),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => MessageBloc(
+              sendMessageUsecase: usecaseConfigchat.sendMessageUsecase!,
+              getMessagessUsecase: usecaseConfigchat.getMessagessUsecase!),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -44,34 +59,11 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.grey,
         ),
-        home: RegistrationForm(),
+        home: LoginPages(),
+        routes: <String, WidgetBuilder>{
+          '/register': (BuildContext context) => const RegistrationFormJesus(),
+        },
       ),
     );
   }
 }
-
-// class test extends StatefulWidget {
-//   const test({super.key});
-
-//   @override
-//   State<test> createState() => _MyWidgetState();
-// }
-
-// class _MyWidgetState extends State<test> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: FutureBuilder(
-//             future: getUsuarios(),
-//             builder: ((context, snapshot) {
-//               if (snapshot.hasData) {
-//                 return ListView.builder(
-//                     itemCount: snapshot.data?.length,
-//                     itemBuilder: ((context, index) {
-//                       return Text(snapshot.data![index]['nombre']);
-//                     }));
-//               }
-//               return Text('2');
-//             })));
-//   }
-// }

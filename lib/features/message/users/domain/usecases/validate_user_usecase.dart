@@ -5,7 +5,7 @@ class ValidateUsersUsecase {
 
   ValidateUsersUsecase(this.usersRepository);
 
-  Future<String> execute(username, passw) async {
+  Future<Map<String, dynamic>> execute(username, passw) async {
     return await usersRepository.validateUser(username, passw);
   }
 }

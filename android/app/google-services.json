@@ -1,34 +1,85 @@
 {
   "project_info": {
-    "project_number": "1041247828311",
-    "project_id": "messageapp-597f7",
-    "storage_bucket": "messageapp-597f7.appspot.com"
+    "project_number": "527878866066",
+    "project_id": "authentications-6b509",
+    "storage_bucket": "authentications-6b509.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1041247828311:android:c286d7701eceed3d256612",
+        "mobilesdk_app_id": "1:527878866066:android:ab9d7513c1b236d3b5d24b",
         "android_client_info": {
-          "package_name": "com.example.messageapp"
+          "package_name": "com.example.actividad1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1041247828311-k0b1a5f4tnuvt78qlgtd3qs10lkh4q1q.apps.googleusercontent.com",
+          "client_id": "527878866066-lg5mad837p8urpn0122fml8m99f9gqdq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.actividad1",
+            "certificate_hash": "44ff3c1e855c6af68b0fa2310b2fb6fb13750940"
+          }
+        },
+        {
+          "client_id": "527878866066-g6hmu26gb9k19pebg704vhapipmlb3n1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDiHaUOs33gvceeZFhDDPO9qdpGA4dbs0"
+          "current_key": "AIzaSyCDlhP5IHisFKzZNelMirEvanwlM-NMTho"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1041247828311-k0b1a5f4tnuvt78qlgtd3qs10lkh4q1q.apps.googleusercontent.com",
+              "client_id": "527878866066-88hvg7ioofdjk88pclfmrupm59038u7s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "527878866066-aq02ea8ccqe66mpik6v8782lrsmc7q9v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.actividad1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527878866066:android:25cde43c91e7dbfdb5d24b",
+        "android_client_info": {
+          "package_name": "com.example.messageapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527878866066-g6hmu26gb9k19pebg704vhapipmlb3n1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDlhP5IHisFKzZNelMirEvanwlM-NMTho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527878866066-88hvg7ioofdjk88pclfmrupm59038u7s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "527878866066-aq02ea8ccqe66mpik6v8782lrsmc7q9v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.actividad1"
+              }
             }
           ]
         }

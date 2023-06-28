@@ -21,7 +21,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     on<UsersEvent>((event, emit) async {
       if (event is GetUsers) {
         try {
-          List<User> response = await getUsersUsecase.execute();
+          List<User> response = await getUsersUsecase.execute(event.username);
           emit(Loaded(users: response));
         } catch (e) {
           emit(Error(error: e.toString()));
@@ -38,7 +38,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       } else if (event is PressLoginUserButton) {
         try {
           emit(UserVerificando());
-          String resultado =
+          Map<String, dynamic> resultado =
               await validateUsersUsecase.execute(event.username, event.passw);
           emit(UserVerificado(estado: resultado));
         } catch (e) {

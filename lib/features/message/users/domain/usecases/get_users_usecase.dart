@@ -6,7 +6,7 @@ class GetUsersUsecase {
 
   GetUsersUsecase(this.usersRepository);
 
-  Future<List<User>> execute() async {
-    return await usersRepository.getUsers();
+  Future<List<User>> execute(username) async {
+    return await usersRepository.getUsers(username);
   }
 }

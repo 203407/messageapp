@@ -8,8 +8,8 @@ class UsersRepositoryImpl implements UsersRepository {
   UsersRepositoryImpl({required this.usersRemoteDataSource});
 
   @override
-  Future<List<User>> getUsers() async {
-    return await usersRemoteDataSource.getUsers();
+  Future<List<User>> getUsers(username) async {
+    return await usersRemoteDataSource.getUsers(username);
   }
 
   @override
@@ -18,7 +18,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<String> validateUser(username, passw) async {
+  Future<Map<String, dynamic>> validateUser(username, passw) async {
     return await usersRemoteDataSource.validateUser(username, passw);
   }
 }
