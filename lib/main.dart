@@ -8,6 +8,7 @@ import 'package:messageapp/features/message/users/presentation/pages/loginJesus.
 import 'package:messageapp/features/message/users/presentation/pages/registerJesus.dart';
 
 import 'package:messageapp/features/message/users/presentation/pages/menu.dart';
+import 'package:messageapp/home_page.dart';
 
 import 'package:messageapp/usecase_config.dart';
 import 'package:messageapp/usecase_configchat.dart';
@@ -60,6 +61,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         home: LoginPages(),
+        // home: MyHomePage(
+        //   title: 'new',
+        // ),
         routes: <String, WidgetBuilder>{
           '/register': (BuildContext context) => const RegistrationFormJesus(),
         },

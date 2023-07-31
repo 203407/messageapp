@@ -1,6 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:video_player/video_player.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 bool isSender(String friend, String current) {
   return friend == current;
@@ -23,6 +26,53 @@ Widget getWidgetForMessage(
       message,
       width: 100,
     );
+  } else if (message is String && tipo == 'location') {
+    LocationData locationData = parseLocationDataFromString(message);
+    return Container(
+      width: 250,
+      height: 300,
+      child: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(locationData.latitude!, locationData.longitude!),
+          zoom: 15,
+        ),
+        markers: {
+          Marker(
+            markerId: const MarkerId("currentLocation"),
+            position: LatLng(locationData.latitude!, locationData.longitude!),
+          ),
+        },
+      ),
+    );
+  } else if (message is String && tipo == 'pdf') {
+    final GlobalKey<SfPdfViewerState> pdfViewerKey = GlobalKey();
+
+    return Container(
+      width: 250,
+      height: 300,
+      child: SfPdfViewer.network(
+        message,
+        key: pdfViewerKey,
+      ),
+    );
+
+    //   return Container(
+    //     width: 20,
+    //     child: SfPdfViewer.network(
+    //       message,
+    //     ),
+    //   );
+
+    // return Container(
+    //   width: 250,
+    //   height: 300,
+    //   child: PDFView(
+    //     filePath: message,
+    //     onViewCreated: (PDFViewController pdfViewController) {
+    //       // No es necesario hacer nada aquí
+    //     },
+    //   ),
+    // );
   } else if (message is String && tipo == 'video') {
     VideoPlayerController videoPlayerController =
         VideoPlayerController.network(message)..initialize();
@@ -72,6 +122,23 @@ Widget getWidgetForMessage(
       child: Text('Reproducir Audio'),
     );
   } else {
-    return Container(); // Si el tipo de mensaje no coincide con ninguno de los casos anteriores, devuelve un widget de contenedor vacío o puedes manejar el caso por defecto de otra manera.
+    return Container();
+  }
+}
+
+LocationData parseLocationDataFromString(String input) {
+  final regex = RegExp(r'-?\d+\.\d+');
+  final matches =
+      regex.allMatches(input).map((match) => match.group(0)!).toList();
+
+  if (matches.length == 2) {
+    double latitude = double.parse(matches[0]);
+    double longitude = double.parse(matches[1]);
+    return LocationData.fromMap({
+      "latitude": latitude,
+      "longitude": longitude,
+    });
+  } else {
+    throw FormatException('Invalid input format');
   }
 }

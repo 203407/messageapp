@@ -15,6 +15,8 @@ import 'package:messageapp/features/message/chat/presentation/blocs/message/mess
 import 'package:messageapp/features/message/chat/presentation/pages/getByType.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:location/location.dart';
+
 class SignF3 extends StatefulWidget {
   const SignF3(
       {Key? key,
@@ -215,6 +217,16 @@ class _SignFState extends State<SignF3> {
                                   onPressed: () {
                                     getImage(context, state.docid);
                                   }),
+                              CupertinoButton(
+                                  child: const Icon(Icons.document_scanner),
+                                  onPressed: () {
+                                    getPdf(context, state.docid);
+                                  }),
+                              CupertinoButton(
+                                  child: const Icon(Icons.location_city),
+                                  onPressed: () {
+                                    getLocation(context, state.docid);
+                                  }),
                             ],
                           )
                         ],
@@ -287,6 +299,28 @@ class _SignFState extends State<SignF3> {
     }
   }
 
+  void getLocation(BuildContext context, docid) async {
+    // XFile? xFile = await _imagePicker.pickImage(source: ImageSource.gallery);
+
+    // if (xFile != null) {
+    // String url = await uploadFile('images/${xFile.name}', File(xFile.path));
+
+    // ignore: use_build_context_synchronously
+
+    Location location = Location();
+
+    // LocationData? currentLocation;
+
+    location.getLocation().then((location) {
+      print(location);
+      sendMessage(context, docid, 'location', location.toString());
+    });
+
+    // } else {
+    // print('No se seleccionó ninguna imagen.');
+    // }
+  }
+
   void getAudio(BuildContext context, docid) async {
     FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -302,6 +336,24 @@ class _SignFState extends State<SignF3> {
       sendMessage(context, docid, 'audio', url);
     } else {
       print('No se seleccionó ningún audio.');
+    }
+  }
+
+  void getPdf(BuildContext context, docid) async {
+    FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (filePickerResult != null) {
+      String url = await uploadFile(
+        'pdfs/${filePickerResult.files.single.name}',
+        File(filePickerResult.files.single.path!),
+      );
+      // ignore: use_build_context_synchronously
+      sendMessage(context, docid, 'pdf', url);
+    } else {
+      print('No se seleccionó ningún PDF');
     }
   }
 
